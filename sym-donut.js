@@ -112,37 +112,40 @@
 					.attr("d", arc);
 				
 				//draw legend
-				legend = svg.selectAll('.legend')
-					.data(pie(data))
-					.enter()
-					.append('g')
-					.attr('class', 'legend')
-					.attr('transform', function (d, i) {
-						var height = legendRectSize + legendSpacing;
-						var offset = height * color.domain().length / 2;
-						var horz = width / 2 + 2 * legendSpacing;
-						var vert = i * height - offset;
-						return 'translate(' + horz + ',' + vert + ')';
-				});
-				
-				legend.append('rect')                                      
-				  .attr('width', legendRectSize)
-				  .attr('height', legendRectSize)
-				  .style('fill', function (d, i) { return color(i); })
-				  .style('stroke', function (d, i) { return color(i); });
+				if (scope.config.showLegend)
+				{
+					legend = svg.selectAll('.legend')
+						.data(pie(data))
+						.enter()
+						.append('g')
+						.attr('class', 'legend')
+						.attr('transform', function (d, i) {
+							var height = legendRectSize + legendSpacing;
+							var offset = height * color.domain().length / 2;
+							var horz = width / 2 + 2 * legendSpacing;
+							var vert = i * height - offset;
+							return 'translate(' + horz + ',' + vert + ')';
+					});
+					
+					legend.append('rect')                                      
+					  .attr('width', legendRectSize)
+					  .attr('height', legendRectSize)
+					  .style('fill', function (d, i) { return color(i); })
+					  .style('stroke', function (d, i) { return color(i); });
 
-				legend.append('text')
-				  .attr('x', legendRectSize + legendSpacing)
-				  .attr('y', legendRectSize - legendSpacing)
-				  .attr()
-				  .text(function (d, i) {
-					  var units = "";
-					  if (typeof data[i].uom != "undefined"){
-						 units = " " + data[i].uom; 
-					  }
-					  return (data[i].label + " [" + data[i].value + units + "]");
-					  })
-				  .attr('fill', function (d, i) { return color(i); });
+					legend.append('text')
+					  .attr('x', legendRectSize + legendSpacing)
+					  .attr('y', legendRectSize - legendSpacing)
+					  .attr()
+					  .text(function (d, i) {
+						  var units = "";
+						  if (typeof data[i].uom != "undefined"){
+							 units = " " + data[i].uom; 
+						  }
+						  return (data[i].label + " [" + data[i].value + units + "]");
+						  })
+					.attr('fill', function (d, i) { return color(i); });
+				}
 			}
 		}
 		
@@ -167,9 +170,11 @@
     		    DataShape: 'Table',
     		    Columns: ["Label", CS.ResourceStrings.TableColValue, CS.ResourceStrings.TableColUnits],
                 Height: 200,
-                Width: 400
+                Width: 400,
+                showLegend:true
             };
-    	}
+    	},
+        configTitle: 'Format Symbol',
 	};
 	CS.symbolCatalog.register(def);
 })(window.Coresight);
